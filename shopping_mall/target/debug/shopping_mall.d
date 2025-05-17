@@ -1,0 +1,1 @@
+/Users/aymane/Desktop/piscine-rust-github/shopping_mall/target/debug/shopping_mall: /Users/aymane/Desktop/piscine-rust-github/shopping_mall/src/lib.rs /Users/aymane/Desktop/piscine-rust-github/shopping_mall/src/main.rs
