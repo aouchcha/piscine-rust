@@ -131,24 +131,28 @@ impl Employee {
         self.salary -= amount;
     }
 }
-pub fn biggest_store(mall: &Mall) -> Option<(String, Store)> {
+pub fn biggest_store(mall: &Mall) -> (String, Store) {
     let mut max_size = 0;
-    let mut result = None;
+    let s  = Store {
+        employees: HashMap::new(),
+        square_meters: 0,
+    };
+    let mut result : (String, Store) = ("".to_string(), s);
     
     for (_floor_name, floor) in &mall.floors {
        for (store_name, store) in &floor.stores {
             if store.square_meters > max_size {
                 max_size = store.square_meters;
-                result = Some((store_name.clone(), store.clone()));
+                result = (store_name.clone(), store.clone());
             }
        }
     }
     
-    result
+    result.clone()
 }
 
-pub fn highest_paid_employee(mall: &Mall) -> Vec<(String,Employee)> {
-    let mut result : Vec<(String,Employee)> = Vec::new();
+pub fn highest_paid_employee(mall: &Mall) -> Vec<(&str,Employee)> {
+    let mut result : Vec<(&str,Employee)> = Vec::new();
     let mut biggest_salary_alt_the_shop : f64 = 0.0;
     for (_floor_name, floor_content) in &mall.floors {
         for (_store_name, store_content) in &floor_content.stores {
@@ -165,7 +169,7 @@ pub fn highest_paid_employee(mall: &Mall) -> Vec<(String,Employee)> {
         for (_store_name, store_content) in &floor_content.stores {
             for (employee_name, employee_infos) in &store_content.employees {
                 if employee_infos.salary == biggest_salary_alt_the_shop {
-                    result.push((employee_name.clone(), *employee_infos));
+                    result.push((employee_name, *employee_infos));
                 }
             }
         }
@@ -186,9 +190,16 @@ pub fn nbr_of_employees(mall : &Mall) -> usize {
 
 pub fn check_for_securities(mall: &mut Mall, map: HashMap<String,Guard>) {
     let mut how_many = 0;
-    for (_, floor_infos) in &mall.floors {  
-        how_many += floor_infos.size_limit as usize/200;
+    let mut total_surface =  0.0;
+    for (_, floor_infos) in &mall.floors {
+        println!("{:?}",floor_infos.size_limit);
+        println!("{:?}", (floor_infos.size_limit as f64/200.0).round());
+        total_surface += floor_infos.size_limit as f64 ;
     }
+
+    how_many = (total_surface/200.0).round() as usize;
+    println!("{:?}",how_many);
+    // println!("{:?}",mall.guards.len());
     if how_many > mall.guards.len() {
         for (guard_name, guard_infos) in &map {
             if how_many == mall.guards.len() {
@@ -203,22 +214,18 @@ pub fn check_for_securities(mall: &mut Mall, map: HashMap<String,Guard>) {
 pub fn cut_or_raise(mall: &mut Mall) {
     let mut raise: Vec<Employee> = Vec::new();
     let mut un_raise: Vec<Employee> = Vec::new();
-    for (_floor_name, floor_content) in &mall.floors {
-        for (_store_name, store_content) in &floor_content.stores {
-            for (_employee_name, employee_infos) in &store_content.employees {
-                if employee_infos.working_hours.1 - employee_infos.working_hours.0 > 10 {
-                   raise.push(*employee_infos)
+    for floor_content in mall.floors.values_mut() {
+        for store_content in floor_content.stores.values_mut() {
+            for mut employee_infos in store_content.employees.values_mut() {
+                if employee_infos.working_hours.1 - employee_infos.working_hours.0 >= 10 {
+                //    raise.push(*employee_infos)
+                    // employee_infos.raise((employee_infos.salary*10.0)/100.0);
+                    employee_infos.salary += employee_infos.salary.clone() * 0.1;
+                //    e.raise((e.salary*10.0)/100.0);
                 }else {
-                   un_raise.push(*employee_infos)
-                }
+                    employee_infos.salary -= employee_infos.salary.clone() * 0.1;                }
             }
         }
-    }
-    for mut e in raise {
-        e.raise((e.salary*10.0)/100.0);
-    }
-    for mut e in un_raise {
-        e.cut((e.salary*10.0)/100.0);
     }
 }
 
