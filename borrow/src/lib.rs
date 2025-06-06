@@ -1,7 +1,7 @@
 pub fn str_len(s: &str) -> usize {
-    let mut len : usize = 0;
-    for _i in s.chars() {
-        len+=1;
+    let mut size = 0 as usize;
+    for _ in s.chars() {
+        size += 1;
     }
-    len
+    size
 }
