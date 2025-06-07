@@ -1,16 +1,8 @@
-pub fn first_subword(mut s: String) -> String {
-    let mut index = 0;
-    for (i, item) in s.chars().enumerate() {
-        if (item > 'z' || item < 'a'){
-            if i == 0 {
-                continue;
-            }
-            index = i;
-            break;
+pub fn first_subword(s: String) -> String {
+    for (i,c) in s.chars().enumerate() {
+        if (c.is_uppercase() || c == '_') && i != 0 {
+            return s[0..i].to_string()
         }
     }
-    if index != 0 {
-        return s[..index].to_string();
-    }
-    s[..].to_string()
+    s
 }
