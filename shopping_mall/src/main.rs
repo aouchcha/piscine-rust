@@ -1,12 +1,9 @@
-mod mall;
+// mod mall;
 
 use std::collections::HashMap;
 
-use mall::*;
+// use mall::*;
 use shopping_mall::*;
-
-fn main() {
-    use shopping_mall::*;
 
 fn main() {
     let mut mall = Mall::new(
@@ -170,7 +167,7 @@ fn main() {
     // returns the list with the highest paid employees
     println!("Highest paid employee: {:#?}", highest_paid_employee(&mall));
 
-    // returns the number of employees
+    // // returns the number of employees
     println!("Number of employees: {}", nbr_of_employees(&mall));
 
     // checks if it is needed to add securities
@@ -256,7 +253,6 @@ fn main() {
     cut_or_raise(&mut mall);
 
     println!("{:#?}", mall);
-}
 }
 
 fn employees(mall: &mut Mall) -> HashMap<String, &mut Employee> {
@@ -460,6 +456,7 @@ fn cut_or_raise_test() {
         assert_eq!(1210.5203, employees.get("Sienna-Rose Penn").unwrap().salary);
     }
 }
+
 
 pub fn mall() -> Mall {
     Mall::new(
