@@ -8,16 +8,16 @@ pub enum Role {
 #[derive(Debug, PartialEq)]
 pub struct Member {
     pub role: Role,
-    pub age: u32,
+    pub age : u32
 }
 
 impl Member {
     pub fn get_promotion(&mut self) {
         match self.role {
-            Role::Associate => self.role = Role::Soldier,
-            Role::Soldier => self.role = Role::Caporegime,
+            Role::Underboss => panic!("Impossible to become a boss"),
             Role::Caporegime => self.role = Role::Underboss,
-            Role::Underboss => panic!("Impossibility !!")
+            Role::Soldier => self.role = Role::Caporegime,
+            Role::Associate => self.role = Role::Soldier
         }
     }
 }

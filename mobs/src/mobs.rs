@@ -1,95 +1,103 @@
-pub use std::collections::HashMap;
-pub use std::collections::HashSet;
-pub mod member;
-pub use member::*;
+use std::collections::{HashMap, HashSet};
+
 pub mod boss;
-pub use boss::*;
+pub use crate::mobs::boss::*;
+pub mod member;
+pub use crate::mobs::member::*;
+
 #[derive(Debug, PartialEq)]
 pub struct Mob {
     pub name : String,
     pub boss: Boss,
-    pub members : HashMap<String,Member>,
-    pub cities : HashSet<String>,
-    pub wealth : u64,
+    pub members: HashMap<String, Member>,
+    pub cities: HashSet<String>,
+    pub wealth: u64
 }
 
-impl Mob {
-    pub fn recruit(&mut self, newmembwe :(&str, u32)) {
-        self.members.insert(newmembwe.0.to_string(), Member { role: member::Role::Associate, age: newmembwe.1 });
+impl Mob  {
+    pub fn recruit(&mut self, member: (&str,u32)) {
+        let _count = self.members.entry(member.0.to_owned()).or_insert(Member {
+            role: Role::Associate,
+            age: member.1
+        });
     }
-    pub fn attack(&mut self, other: &mut Mob) {
-        let mut our_power : u32 = 0;
-        let mut their_power : u32 = 0;
-        let mut member_remove = String::new();
-        let mut member_remove_age = 60;
-        for (_member_name, member_data) in &self.members {
+    pub fn attack(&mut self, m: &mut Mob) {
+        let mut attacker_score = 0;
+        let mut other_score = 0 ;
+        let mut our_victime : String = String::new();
+        let mut our_age :u32 = 60;
+        let mut other_victime : String = String::new();
+        let mut other_age :u32 = 60;
+        let mut winner : &mut Mob;
+        let mut loser : &mut Mob;
+
+        for (name, member_data) in &self.members {
             match member_data.role {
-                member::Role::Underboss => our_power += 4, 
-                member::Role::Caporegime => our_power += 3, 
-                member::Role::Soldier => our_power += 2, 
-                member::Role::Associate => our_power += 1, 
+                Role::Underboss => attacker_score += 4,
+                Role::Caporegime => attacker_score += 3,
+                Role::Soldier => attacker_score += 2,
+                Role::Associate=> attacker_score += 1
+            }
+            if member_data.age < our_age {
+                our_age = member_data.age;
+                our_victime = name.clone();
             }
         }
 
-        for (_member_name, member_data) in &other.members {
+        for (name, member_data) in &m.members {
             match member_data.role {
-                member::Role::Underboss => their_power += 4, 
-                member::Role::Caporegime => their_power += 3, 
-                member::Role::Soldier => their_power += 2, 
-                member::Role::Associate => their_power += 1, 
+                Role::Underboss => other_score += 4,
+                Role::Caporegime => other_score += 3,
+                Role::Soldier => other_score += 2,
+                Role::Associate=> other_score += 1
+            }
+            if member_data.age < other_age {
+                other_age = member_data.age;
+                other_victime = name.clone();
             }
         }
-        let loser: &mut Mob ;
-        let winner: &mut Mob ;
 
-
-        if their_power > our_power || their_power == our_power{
-            loser =  self;
-            winner = other;
-        }else {
-            loser =  other;
+        if attacker_score > other_score {
+            m.members.remove(&other_victime);
             winner = self;
+            loser = m;
+        }else {
+            self.members.remove(&our_victime);
+            winner = m;
+            loser = self;
         }
-        for (member_name, member_data) in &loser.members {
-            if member_data.age < member_remove_age {
-                member_remove_age = member_data.age;
-                member_remove = member_name.clone();
-            } 
-        }
-        loser.members.remove(&member_remove);
 
         if loser.members.len() == 0 {
+            for name in &loser.cities.clone() {
+                winner.cities.insert(name.clone());
+                loser.cities.remove(name);
+            }
             winner.wealth += loser.wealth;
             loser.wealth = 0;
-            for citie in &loser.cities{
-                winner.cities.insert(citie.clone());
-            }
-            loser.cities.clear();
         }
-    }
-    pub fn steal(&mut self, target: &mut Mob, value_to_steal: u64) {
-        println!("{:?}",self.wealth);
-        println!("{:?}",target.wealth);
-        println!("{:?}",value_to_steal);
-        
-        if (target.wealth as i32) - (value_to_steal as i32) <=  0 {
-           self.wealth += target.wealth;
-           target.wealth = 0;
-           return
-        }
-        println!("{:?}",target.wealth - value_to_steal);
-        self.wealth += value_to_steal;
-        target.wealth -= value_to_steal;
+
     }
 
-    pub fn conquer_city(&mut self, others: &[&Mob], citie: String) {
-        for mob in others {
-            for cities in &mob.cities {
-                if citie == *cities {
-                    return
-                }
+    pub fn steal(&mut self, m: &mut Mob, money: u64) {
+        let mut ms: u64 = money;
+        if m.wealth < money {
+            ms = m.wealth;
+        }
+        self.wealth += ms;
+        m.wealth -= ms;
+    }
+
+    pub fn conquer_city(&mut self, ms: &[&Mob], name: String) {
+        let mut have_if = false;
+        for mob in ms {
+            if mob.cities.contains(&name) {
+                have_if = true;
+                break
             }
         }
-        self.cities.insert(citie);
+        if !have_if {
+            self.cities.insert(name);
+        }
     }
+
 }

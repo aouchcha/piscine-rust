@@ -1,6 +1,5 @@
 mod mobs;
-// mod member;
-use mobs::*;
+use crate::mobs::*;
 
 #[test]
 fn create_boss() {
@@ -112,39 +111,6 @@ fn mob_recruit() {
     );
 }
 
-#[test]
-fn member_get_promotion() {
-    let (mut mob, _) = mobs();
-
-    let member = mob.members.get_mut("Benny Eggs").unwrap();
-
-    member.get_promotion();
-    assert_eq!(member.role, member::Role::Caporegime);
-    member.get_promotion();
-    assert_eq!(member.role, member::Role::Underboss);
-}
-
-#[test]
-#[should_panic]
-fn member_get_promotion_panic() {
-    let (_, mut mob) = mobs();
-
-    let member = mob.members.get_mut("Crazy Joe").unwrap();
-
-    member.get_promotion();
-}
-
-#[test]
-fn mob_steal() {
-    let (mut a, mut b) = mobs();
-    b.steal(&mut a, 10000);
-    assert_eq!(a.wealth, 90000);
-    assert_eq!(b.wealth, 80000);
-
-    b.steal(&mut a, 1000000);
-    assert_eq!(a.wealth, 0);
-    assert_eq!(b.wealth, 170000);
-}
 
 #[test]
 fn mob_attack() {
@@ -182,6 +148,41 @@ fn no_members_mob() {
         .cities
         .is_superset(&["San Jose", "San Francisco"].map(str::to_owned).into()));
     assert_eq!(b.wealth, 170000);
+}
+
+
+#[test]
+fn mob_steal() {
+    let (mut a, mut b) = mobs();
+    b.steal(&mut a, 10000);
+    assert_eq!(a.wealth, 90000);
+    assert_eq!(b.wealth, 80000);
+
+    b.steal(&mut a, 1000000);
+    assert_eq!(a.wealth, 0);
+    assert_eq!(b.wealth, 170000);
+}
+
+#[test]
+fn member_get_promotion() {
+    let (mut mob, _) = mobs();
+
+    let member = mob.members.get_mut("Benny Eggs").unwrap();
+
+    member.get_promotion();
+    assert_eq!(member.role, member::Role::Caporegime);
+    member.get_promotion();
+    assert_eq!(member.role, member::Role::Underboss);
+}
+
+#[test]
+#[should_panic]
+fn member_get_promotion_panic() {
+    let (_, mut mob) = mobs();
+
+    let member = mob.members.get_mut("Crazy Joe").unwrap();
+
+    member.get_promotion();
 }
 
 #[test]
