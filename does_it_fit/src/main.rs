@@ -19,7 +19,7 @@ fn main() {
     );
 }
 
-use does_it_fit::*;
+// use does_it_fit::*;
 
 #[test]
 fn no_volumes_shapes() {
