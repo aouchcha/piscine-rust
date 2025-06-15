@@ -1,22 +1,40 @@
 pub fn talking(text: &str) -> &str {
-    println!("{:?} {:?} {:?}", text, is_uppercase(text), text.contains("?"));
-    if is_uppercase(text) && text.contains("?") {
-        return "Quiet, I am thinking!"
-    }else if !is_uppercase(text) && text.chars().nth(text.len()-1).unwrap() == '?' {
-        return "Sure."
-    }else if text.trim().len() == 0 {
+    if text.trim().len() == 0 {
         return "Just say something!"
-    }else if is_uppercase(text) {
-        return  "There is no need to yell, calm down!"
     }
+
+    let holder : Vec<char> = text.chars().collect();  
+    if is_uppercase(text) {
+        if  holder[holder.len() - 1] != '?' {
+            return "There is no need to yell, calm down!"
+        } else {
+            return "Quiet, I am thinking!"
+        }
+    }
+
+    if holder[holder.len() - 1] == '?' {
+        return "Sure."
+    }
+
+   
+
     "Interesting"
 }
 
-pub fn is_uppercase(s: &str) -> bool {
+fn is_uppercase(s: &str) -> bool {
+    let mut is_number = false;
     for c in s.chars() {
-        if c >= 'a' && c <= 'z' || c >= '0' && c <= '9'{
+        if c.is_numeric() {
+            is_number = true;
+        }else if c.is_alphabetic() {
+            is_number = false;
+        }
+        if c.is_ascii_lowercase() {
             return false
         }
+    }
+    if is_number {
+        return !is_number;
     }
     true
 }

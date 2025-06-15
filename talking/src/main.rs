@@ -19,25 +19,25 @@ fn main() {
 #[cfg(test)]
 mod tests {
     use super::*;
-    // #[test]
-    // fn test_yell() {
-    //     assert_eq!(
-    //         talking("JUST DO IT!"),
-    //         "There is no need to yell, calm down!"
-    //     );
-    //     assert_eq!(
-    //         talking("1, 2, 3 GO!"),
-    //         "There is no need to yell, calm down!"
-    //     );
-    //     assert_eq!(
-    //         talking("I LOVE YELLING"),
-    //         "There is no need to yell, calm down!"
-    //     );
-    //     assert_eq!(
-    //         talking("WJDAGSAF ASVF EVA VA"),
-    //         "There is no need to yell, calm down!"
-    //     );
-    // }
+    #[test]
+    fn test_yell() {
+        assert_eq!(
+            talking("JUST DO IT!"),
+            "There is no need to yell, calm down!"
+        );
+        assert_eq!(
+            talking("1, 2, 3 GO!"),
+            "There is no need to yell, calm down!"
+        );
+        assert_eq!(
+            talking("I LOVE YELLING"),
+            "There is no need to yell, calm down!"
+        );
+        assert_eq!(
+            talking("WJDAGSAF ASVF EVA VA"),
+            "There is no need to yell, calm down!"
+        );
+    }
 
     #[test]
     fn test_question() {
