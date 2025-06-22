@@ -2,8 +2,8 @@ mod mall;
 
 use std::collections::HashMap;
 
-use mall::*;
-use shopping_mall::*;
+// use mall::*;
+use nn::*;
 
 
 fn main() {
