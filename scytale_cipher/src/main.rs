@@ -1,8 +1,12 @@
 use scytale_cipher::*;
 
 fn main() {
-    println!("{:?}", scytale_cipher(String::from("attack morning"), 6));
-    // output : a ntmgto ar cn ki
+    let tt = scytale_cipher(String::from("scytale Code"), 6);
+    println!("{:?}",tt);
+    // output :  "sec yCtoadle"
+    let vv = scytale_cipher("sec yCtoadle".to_owned(), 6);
+    println!("{:?}",vv);
+
 }
 
 #[test]

@@ -8,7 +8,7 @@ pub fn scytale_cipher(message: String, i: u32) -> String {
     let mut ii: usize = 0;
     let mut j: usize = 0;
 
-    for c in message.chars() {
+    for c in message.chars().rev() {
         if j == i as usize {
             j = 0;
             ii += 1;
