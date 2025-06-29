@@ -15,13 +15,13 @@ pub enum RomanDigit {
 impl From<u32> for RomanDigit {
     fn from(n: u32) -> Self {
         match n {
-            1..=4 => RomanDigit::I,
-            5..=9 => RomanDigit::V,
-            10..=49 => RomanDigit::X,
-            50..=99 => RomanDigit::L,
-            100..=499 => RomanDigit::C,
-            500..=999 => RomanDigit::D,
-            1000..=5000 => RomanDigit::M,
+            1 => RomanDigit::I,
+            5 => RomanDigit::V,
+            10 => RomanDigit::X,
+            50 => RomanDigit::L,
+            100 => RomanDigit::C,
+            500 => RomanDigit::D,
+            1000 => RomanDigit::M,
             _ => RomanDigit::Nulla,
         }
     }
